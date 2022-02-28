@@ -1,37 +1,17 @@
 require_relative("common.rb")
 
 def main()
-	puts "Modded OneShot directory:"
-
-    cataloguePath = "#{__dir__}/catalogue.json"
-    if !File.exist?(cataloguePath)
-        puts "Missing catalogue file at #{cataloguePath}"
-        STDIN.getch
-        return
-    end
-
+    cataloguePath = "#{Dir.pwd}/catalogue.json"
+    raise "Missing catalogue file at #{cataloguePath}" if !File.exist?(cataloguePath)
+	
 	catalogue = {}
 	begin
 		catalogue = JSON.parse(File.read(cataloguePath).chomp)
 	rescue => error
-		puts "Failed parsing catalogue: #{error.message}"
-        STDIN.getch
-		return
+		raise puts_getch("Failed parsing catalogue: #{error.message}")
 	end
 	
-	root = nil
-	loop do
-		root = gets.chomp
-		if Dir.exist?(root)
-			if File.exist?(root + "/oneshot.exe")
-				break
-			else
-				puts "Not a OneShot directory"
-			end
-		else
-			puts "Not a directory"
-		end
-	end
+	root = dir_prompt("Modded OneShot directory:")
 
 	nonexistent = []
 	identical = []
@@ -41,7 +21,7 @@ def main()
 		full = "#{root}/#{relative}"
 		puts "> Checking #{full}"
 		if File.exist?(full)
-			hash == hashFile(full) ? identical.push(full) : modified.push(full)
+			hash == hash_file(full) ? identical.push(full) : modified.push(full)
 		else
 			nonexistent.push(full)
 		end
@@ -52,8 +32,7 @@ def main()
 	puts "- Identical: #{identical.length}"
 	puts "- Modified: #{modified.length}"
 
-	puts "List them? (y/n)"
-	if STDIN.getch.downcase == 'y'
+	if puts_getch("List them? (y/n)") == 'y'
 		if nonexistent.length > 0
 			puts "========== MISSING FILES =========="
 			nonexistent.each do |file| puts file end
@@ -77,21 +56,12 @@ def main()
 		end
 	end
 
-	puts nil, "Delete identical files? (y/n)"
-	if STDIN.getch.downcase == 'y'
+	if puts_getch("Delete identical files? (y/n)") == 'y'
 		identical.each do |file|
 			puts "> Deleting #{file}"
 			File.delete(file)
 		end
 	end
-
-	puts nil, "Jobs done!"
-	STDIN.getch
 end
 
-begin
-	main()
-rescue => error
-	puts error.message
-	STDIN.getch
-end
+run()

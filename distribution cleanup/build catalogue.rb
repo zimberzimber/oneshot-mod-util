@@ -1,55 +1,17 @@
 require_relative("common.rb")
 
 def main()
-	root = nil
 	catalogue = {}
+	root = dir_prompt("Vanilla OneShot directory:")
 
-	puts "Vanilla OneShot directory:"
-
-	loop do
-		root = gets.chomp
-		if Dir.exist?(root)
-			if File.exist?(root + "/oneshot.exe")
-				break
-			else
-				puts "Not a OneShot directory"
-			end
-		else
-			puts "Not a directory"
-		end
-	end
-
-	scanFiles(root, "",  -> (full, relative) {
+	scan_files(root, "",  -> (full, relative) {
 		puts relative
-		catalogue[relative] = hashFile(full)
+		catalogue[relative] = hash_file(full)
 	})
 
 	catalogueFile = File.open("catalogue.json", "w+")
-	catalogueFile.puts(catalogue.to_json)
+	catalogueFile.print(catalogue.to_json)
 	catalogueFile.close()
-
-	puts nil, "Jobs done!"
-	STDIN.getch
 end
 
-def scan(relative="")
-	full = $root + relative
-	Dir.foreach(full) do |fileName|
-		next if fileName == '.' || fileName == '..'
-
-		fullFileName = "#{full}/#{fileName}"
-		if File.directory?(fullFileName)
-			scan("#{relative}/#{fileName}")
-		else
-			puts fullFileName
-			$catalogue["#{relative}/#{fileName}"] = hashFile(fullFileName)
-		end
-	end
-end
-
-begin
-	main()
-rescue => error
-	puts error.message
-	STDIN.getch
-end
+run()
