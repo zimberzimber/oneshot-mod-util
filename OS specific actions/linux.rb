@@ -18,7 +18,8 @@ $to_remove = [
 ]
 
 def main()
-    root = dir_prompt("Modded OneShot directory:")
+    raise "Trying to run cleanup for Linux while not on Linux machine!" if !OS.linux?
+    root = try_get_dir_from_argv(message:"Modded OneShot directory:")
     rake(root)
     delete_files_from(root, $to_remove)
 end

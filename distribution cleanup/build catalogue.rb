@@ -2,7 +2,7 @@ require_relative("common.rb")
 
 def main()
 	catalogue = {}
-	root = dir_prompt("Vanilla OneShot directory:")
+    root = try_get_dir_from_argv(message:"Vanilla OneShot directory:")
 
 	scan_files(root, "",  -> (full, relative) {
 		puts relative

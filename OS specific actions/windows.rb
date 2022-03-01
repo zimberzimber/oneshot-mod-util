@@ -13,8 +13,9 @@ $to_remove = [
             "lib/ruby/x86_64-linux"
 ]
 
-def main()
-    root = dir_prompt("Modded OneShot directory:")
+def self.run()
+    raise "Trying to run cleanup for Windows while not on Windows machine!" if !OS.windows?
+    root = try_get_dir_from_argv(message:"Modded OneShot directory:")
     rake(root)
     delete_files_from(root, $to_remove)
 end

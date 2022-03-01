@@ -2,17 +2,29 @@ require 'io/console'
 
 def dir_prompt(msg = "Working directory:")
 	loop do
-		root = puts_gets(msg)
-		if Dir.exist?(root)
-			if File.exist?(root + "/oneshot.exe")
-				return root
-			else
-				puts "Not a OneShot directory"
-			end
-		else
-			puts "Not a directory"
-		end
+		dir = puts_gets(msg)
+		return dir if dir_valid(dir)
 	end
+end
+
+def dir_valid(dir)
+	if Dir.exist?(dir)
+		if File.exist?(dir + "/oneshot.exe")
+			return true
+		else
+			puts "#{dir} is not a OneShot directory"
+			return false
+		end
+	else
+		puts "#{dir} is not an existing directory"
+		return false
+	end
+end
+
+def try_get_dir_from_argv(index=0, message: "Working directory:")
+    dir = ARGV[index]
+    dir = dir_prompt(message) if dir.nil? || !dir_valid(dir)
+	return dir
 end
 
 def puts_getch(msg)
@@ -51,3 +63,27 @@ def run()
     	STDIN.getch
     end
 end
+
+# https://stackoverflow.com/a/171011
+module OS
+	def OS.windows?
+	  (/cygwin|mswin|mingw|bccwin|wince|emx/ =~ RUBY_PLATFORM) != nil
+	end
+  
+	def OS.mac?
+	 (/darwin/ =~ RUBY_PLATFORM) != nil
+	end
+  
+	def OS.unix?
+	  !OS.windows?
+	end
+  
+	def OS.linux?
+	  OS.unix? and not OS.mac?
+	end
+  
+	def OS.jruby?
+	  RUBY_ENGINE == 'jruby'
+	end
+  end
+  

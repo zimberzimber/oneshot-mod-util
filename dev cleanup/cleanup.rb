@@ -31,7 +31,7 @@ $to_remove = [
 ]
 
 def main()
-    root = dir_prompt("Modded OneShot directory:")
+    root = try_get_dir_from_argv(message:"Modded OneShot directory:")
     delete_files_from(root, $to_remove)
 end
 
