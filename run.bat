@@ -1,1 +1,1 @@
-"main executor.rb" "D:\OSFM"
+"main executor.rb" "D:\OSFM" -y

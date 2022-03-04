@@ -18,16 +18,19 @@ def main()
     FileUtils.copy_entry(template_dir, steam_root)
 
     puts "Dev clean up..."
-    system("\"dev cleanup/cleanup.rb\" \"#{steam_root}\"")
+    require "./dev cleanup/cleanup.rb"
+    Dev_Cleanup.run(steam_root)
     
     puts "OS specific up..."
-    system("\"OS specific actions/#{OS.windows? ? "windows" : "linux"}.rb\" \"#{steam_root}\"")
+    require "./OS specific actions/#{OS.windows? ? "windows" : "linux"}.rb"
+    OS_Specific_Actions.run(steam_root)
     
     puts "Creating Itch duplicate..."
     FileUtils.copy_entry(steam_root, itch_root)
 
     puts "Itch cleanup..."
-    system("\"distribution cleanup/compare.rb\" \"#{itch_root}\" -y")
+    require "./distribution cleanup/compare.rb"
+    Distribution_Cleanup.run(itch_root)
 end
 
 run()
