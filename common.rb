@@ -55,7 +55,7 @@ def delete_files_from(root, files)
 end
 
 def parse_dir_input(dir)
-	return "#{__dir__}/#{dir}" if dir.class == String && dir[0].start_with?(".")
+	return "#{Dir.pwd}/#{dir}" if dir.class == String && dir[0].start_with?(".")
 	return dir
 end
 
