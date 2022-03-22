@@ -1,8 +1,9 @@
+#!/usr/bin/ruby
 require_relative("common.rb")
 require "fileutils"
 
 def main()
-    raise "Only Windows and Linux are supported!" unless OS.windows? || OS.linux
+    raise "Only Windows and Linux are supported!" unless OS.windows? || OS.linux?
 
     template_dir = try_get_dir_from_argv(message:"Modded template directory:")
     output_root = Dir.pwd + "/out"

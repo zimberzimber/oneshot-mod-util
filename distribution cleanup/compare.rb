@@ -3,6 +3,17 @@ require_relative("common.rb")
 module Distribution_Cleanup
 	SKIP_CONFIRMATION = ARGV.include?("-y")
 
+	STEAM_RELATED = [
+		# Windows
+		"steam_api.dll", 
+		"steam_appid.txt", 
+		"steamshim.exe",
+
+		# Linux
+		"steamshim",
+		"libsteam_api.so"
+	]
+
 	def self.run(root)
 	    cataloguePath = "#{__dir__}/catalogue.json"
 	    raise "Missing catalogue file at #{cataloguePath}" if !File.exist?(cataloguePath)
@@ -57,10 +68,15 @@ module Distribution_Cleanup
 			end
 		end
 
-		if SKIP_CONFIRMATION || puts_getch("Delete identical files? (y/n)") == 'y'
+		if SKIP_CONFIRMATION || puts_getch("Delete identical and Steam files? (y/n)") == 'y'
 			identical.each do |file|
 				puts "> Deleting #{file}"
 				File.delete(file)
+			end
+
+			STEAM_RELATED.each do |name|
+				file = "#{root}/#{name}"
+				File.delete(file) if File.exist?(file)
 			end
 		end
 	end
