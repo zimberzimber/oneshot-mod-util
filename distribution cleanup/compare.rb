@@ -1,8 +1,6 @@
 require_relative("common.rb")
 
 module Distribution_Cleanup
-	SKIP_CONFIRMATION = ARGV.include?("-y")
-
 	STEAM_RELATED = [
 		# Windows
 		"steam_api.dll", 
@@ -22,7 +20,7 @@ module Distribution_Cleanup
 		begin
 			catalogue = JSON.parse(File.read(cataloguePath).chomp)
 		rescue => error
-			raise puts_getch("Failed parsing catalogue: #{error.message}")
+			raise "Failed parsing catalogue: #{error.message}"
 		end
 
 		nonexistent = []
@@ -39,47 +37,19 @@ module Distribution_Cleanup
 			end
 		end
 
-		puts nil, "File check complete!"
-		puts "- Nonexistent: #{nonexistent.length}"
-		puts "- Identical: #{identical.length}"
-		puts "- Modified: #{modified.length}"
+		puts "- Nonexistent : #{nonexistent.length}"
+		puts "- Identical   : #{identical.length}"
+		puts "- Modified    : #{modified.length}"
 
-		if !SKIP_CONFIRMATION && puts_getch("List them? (y/n)") == 'y'
-			if nonexistent.length > 0
-				puts "========== MISSING FILES =========="
-				nonexistent.each do |file| puts file end
-				puts "========== MISSING FILES =========="
-			end
-
-			puts
-
-			if modified.length > 0
-				puts "========== MODIFIED FILES =========="
-				modified.each do |file| puts file end
-				puts "========== MODIFIED FILES =========="
-			end
-
-			puts
-
-			if identical.length > 0
-				puts "========== IDENTICAL FILES =========="
-				identical.each do |file| puts file end
-				puts "========== IDENTICAL FILES =========="
-			end
+		identical.each do |file|
+			puts "> Deleting identical: #{file}"
+			File.delete(file)
 		end
 
-		if SKIP_CONFIRMATION || puts_getch("Delete identical and Steam files? (y/n)") == 'y'
-			identical.each do |file|
-				puts "> Deleting #{file}"
-				File.delete(file)
-			end
-
-			STEAM_RELATED.each do |name|
-				file = "#{root}/#{name}"
-				File.delete(file) if File.exist?(file)
-			end
+		STEAM_RELATED.each do |name|
+			file = "#{root}/#{name}"
+			puts "> Deleting Steam file: #{file}"
+			File.delete(file) if File.exist?(file)
 		end
 	end
 end
-
-#root = try_get_dir_from_argv(message:"Modded OneShot directory:")

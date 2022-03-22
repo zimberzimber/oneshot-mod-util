@@ -3,13 +3,10 @@ require 'fileutils'
 
 def rake(root)
     if Gem.find_files("rake").empty?
-        if puts_getch("Couldn't find 'rake' gem. Install now? (y/n)") == 'y'
-            Gem.install("rake")
-        else
-            raise "Must have 'rake' gem installed to complete the process."
-        end
+        puts "> Couldn't find 'rake' gem."
+        puts "> Installing now..."
+        Gem.install("rake")
     end
-
 
     original_dir = Dir.pwd
     ruby_files = root + "/Ruby-files"

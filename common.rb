@@ -2,7 +2,7 @@ require 'io/console'
 
 def dir_prompt(msg = "Working directory:")
 	loop do
-		dir = puts_gets(msg)
+		dir = parse_dir_input(puts_gets(msg))
 		return dir if dir_valid(dir)
 	end
 end
@@ -22,7 +22,7 @@ def dir_valid(dir)
 end
 
 def try_get_dir_from_argv(index=0, message: "Working directory:")
-    dir = ARGV[index]
+    dir = parse_dir_input(ARGV[index])
     dir = dir_prompt(message) if dir.nil? || !dir_valid(dir)
 	return dir
 end
@@ -54,36 +54,31 @@ def delete_files_from(root, files)
     end
 end
 
-def run()
-    begin
-    	main()
-		puts_getch("Jobs done!")
-    rescue => error
-    	puts error.to_s
-    	STDIN.getch
-    end
+def parse_dir_input(dir)
+	return "#{__dir__}/#{dir}" if dir.class == String && dir[0].start_with?(".")
+	return dir
 end
 
 # https://stackoverflow.com/a/171011
 module OS
 	def OS.windows?
-	  (/cygwin|mswin|mingw|bccwin|wince|emx/ =~ RUBY_PLATFORM) != nil
+		(/cygwin|mswin|mingw|bccwin|wince|emx/ =~ RUBY_PLATFORM) != nil
 	end
-  
+
 	def OS.mac?
-	 (/darwin/ =~ RUBY_PLATFORM) != nil
+		(/darwin/ =~ RUBY_PLATFORM) != nil
 	end
-  
+
 	def OS.unix?
-	  !OS.windows?
+		!OS.windows?
 	end
-  
+
 	def OS.linux?
-	  OS.unix? and not OS.mac?
+		OS.unix? && !OS.mac?
 	end
-  
+
 	def OS.jruby?
-	  RUBY_ENGINE == 'jruby'
+		RUBY_ENGINE == 'jruby'
 	end
-  end
+end
   

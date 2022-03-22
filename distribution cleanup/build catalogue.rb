@@ -1,17 +1,15 @@
 require_relative("common.rb")
 
-def main()
-	catalogue = {}
-    root = try_get_dir_from_argv(message:"Vanilla OneShot directory:")
+catalogue = {}
+root = try_get_dir_from_argv(message: "Vanilla OneShot directory:")
 
-	scan_files(root, "",  -> (full, relative) {
-		puts relative
-		catalogue[relative] = hash_file(full)
-	})
+scan_files(root, "",  -> (full, relative) {
+	puts relative
+	catalogue[relative] = hash_file(full)
+})
 
-	catalogueFile = File.open("catalogue.json", "w+")
-	catalogueFile.print(catalogue.to_json)
-	catalogueFile.close()
-end
+catalogueFile = File.open("catalogue.json", "w+")
+catalogueFile.print(catalogue.to_json)
+catalogueFile.close()
 
-run()
+puts("> Catalogue built!")

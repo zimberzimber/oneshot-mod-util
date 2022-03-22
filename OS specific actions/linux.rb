@@ -24,4 +24,3 @@ module OS_Specific_Actions
         delete_files_from(root, TO_REMOVE)
     end
 end
-# root = try_get_dir_from_argv(message:"Modded OneShot directory:")
