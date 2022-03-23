@@ -13,7 +13,7 @@ module OS_Specific_Actions
             "lib/OpenAL32.dll",
             "lib/SDL2.dll",
             "lib/sigc-vc120-2_0.dll",
-            "lib/x64-vcruntime140-ruby300",
+            "lib/x64-vcruntime140-ruby300.dll",
             "lib/zlib1.dll",
                 "lib/ruby/x64-mswin64_140",
     ]
