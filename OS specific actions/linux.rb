@@ -17,10 +17,18 @@ module OS_Specific_Actions
             "lib/zlib1.dll",
                 "lib/ruby/x64-mswin64_140",
     ]
+	
+	TO_CHMOD = [
+		"oneshot",
+		"steamshim",
+		"lib/oneshot",
+	]
 
     def self.run(root)
         raise "Trying to run cleanup for Linux while not on Linux machine!" if !OS.linux?
         rake(root)
         delete_files_from(root, TO_REMOVE)
+		
+		system("chmod +rwx #{TO_CHMOD.join(' ')}")
     end
 end
