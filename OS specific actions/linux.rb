@@ -26,9 +26,9 @@ module OS_Specific_Actions
 
     def self.run(root)
         raise "Trying to run cleanup for Linux while not on Linux machine!" if !OS.linux?
+        
+		system("chmod +rwx #{TO_CHMOD.join(' ')}")
         rake(root)
         delete_files_from(root, TO_REMOVE)
-		
-		system("chmod +rwx #{TO_CHMOD.join(' ')}")
     end
 end
