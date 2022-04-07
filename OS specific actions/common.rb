@@ -15,7 +15,8 @@ def rake(root)
     raise "Missing `Rakefile` at: #{ruby_files}" if !File.exist?(ruby_files + "/Rakefile")
 
     Dir.chdir(ruby_files)
-    system("rake build_iseq")
+    # system("rake build_iseq")
+    system("rake")
     Dir.chdir(original_dir)
     FileUtils.rm_rf(ruby_files)
 end
