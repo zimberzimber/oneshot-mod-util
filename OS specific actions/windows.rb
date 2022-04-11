@@ -8,10 +8,12 @@ module OS_Specific_Actions
         "libsteam_api.so",
         "oneshot",
         "steamshim",
-            "lib/discord_game_sdk.so",
-            "lib/libruby.so.3.0",
-            "lib/oneshot",
-                "lib/ruby/x86_64-linux"
+        "lib/discord_game_sdk.so",
+        "lib/libruby.so.3.0",
+        "lib/oneshot",
+        "lib/ruby/x86_64-linux",
+        "lib/libaudio.so.2",
+        "lib/libxfconf-0.so.3"
     ]
 
     def self.run(root)
