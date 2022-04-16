@@ -9,6 +9,7 @@ module Dev_Cleanup
         "Demos",
         "docs",
         "modfile",
+        "Unencrypted-Data",
         # "Ruby-files", # Needed for the Rake step
     
         ".gitignore",
