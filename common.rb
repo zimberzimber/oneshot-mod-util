@@ -1,5 +1,54 @@
 require 'io/console'
 
+IGNORED_DIRS = [ ".", "..", ".git", ".vscode", ".idea", ".github" ]
+
+def each_file(root, relative, proc)
+	full = root + relative
+	Dir.foreach(full) do |file|
+		next if IGNORED_DIRS.include?(file)
+		
+        relative_file = "#{relative}/#{file}"
+        full_file = "#{full}/#{file}"
+        
+		if File.directory?(full_file)
+			each_file(root, relative_file, proc)
+		else
+            proc.call(full_file, relative_file)
+		end
+	end
+end
+
+def delete_files_from(root, files)
+	files.each do |file|
+        full = "#{root}/#{file}"
+        if File.exist?(full)
+            if File.directory?(full)
+                puts "> Removing directory: #{full}"
+                FileUtils.rm_rf(full)
+            else
+                puts "> Removing file: #{full}"
+                File.delete(full)
+            end
+        else
+            puts "> Not found: #{full}"
+        end
+    end
+end
+
+def delete_empty_directories(root)
+	Dir.glob( "**/", base: root ).reverse_each { |d|
+		full = "#{root}/#{d}"
+		if Dir.empty?(full)
+			puts "> Deleting empty directory: #{full}"
+			Dir.rmdir(full)
+		end
+	}
+end
+
+
+
+
+
 def dir_prompt(msg = "Working directory:")
 	loop do
 		dir = parse_dir_input(puts_gets(msg))
@@ -37,22 +86,6 @@ def puts_gets(msg)
 	return gets.chomp
 end
 
-def delete_files_from(root, files)
-	files.each do |file|
-        full = "#{root}/#{file}"
-        if File.exist?(full)
-            if File.directory?(full)
-                puts "> Removing directory: #{full}"
-                FileUtils.rm_rf(full)
-            else
-                puts "> Removing file: #{full}"
-                File.delete(full)
-            end
-        else
-            puts "> Not found: #{full}"
-        end
-    end
-end
 
 def parse_dir_input(dir)
 	return "#{Dir.pwd}/#{dir}" if dir.class == String && dir[0].start_with?(".")
