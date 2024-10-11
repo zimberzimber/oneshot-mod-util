@@ -1,19 +1,20 @@
 require 'io/console'
 
-IGNORED_DIRS = [ ".", "..", ".git", ".vscode", ".idea", ".github" ]
+IGNORED_DIRS = [ ".", "..", ".git", ".vscode", ".idea", ".github", ".luminol" ]
 
 def each_file(root, relative, proc)
 	full = root + relative
+
 	Dir.foreach(full) do |file|
 		next if IGNORED_DIRS.include?(file)
 		
-        relative_file = "#{relative}/#{file}"
-        full_file = "#{full}/#{file}"
+		relative_file = "#{relative}/#{file}"
+		full_file = "#{full}/#{file}"
         
 		if File.directory?(full_file)
 			each_file(root, relative_file, proc)
 		else
-            proc.call(full_file, relative_file)
+			proc.call(full_file, relative_file)
 		end
 	end
 end
@@ -68,12 +69,6 @@ def dir_valid(dir)
 		puts "#{dir} is not an existing directory"
 		return false
 	end
-end
-
-def try_get_dir_from_argv(index=0, message: "Working directory:")
-    dir = parse_dir_input(ARGV[index])
-    dir = dir_prompt(message) if dir.nil? || !dir_valid(dir)
-	return dir
 end
 
 def puts_getch(msg)

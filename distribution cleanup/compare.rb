@@ -1,5 +1,6 @@
+raise "Usage: compare.rb <target_directory>" if ARGV.length < 1
+
 root = ARGV[0].to_s
-raise "Usage: build_catalogue.rb <directory to catalogue>" if ARGV.length < 1
 raise "#{root} is not an existing directory." if !Dir.exist?(root)
 
 catalogue_path = "#{__dir__}/catalogue.json"
@@ -28,9 +29,11 @@ catalogue.each do |relative, hash|
 	end
 end
 
+puts "\n=========================================================="
 puts "# Nonexistent : #{nonexistent.length}"
 puts "# Identical   : #{identical.length}"
 puts "# Modified    : #{modified.length}"
+puts "==========================================================\n"
 
 identical.each do |file|
 	puts "> Deleting identical file: #{file}"
@@ -38,7 +41,6 @@ identical.each do |file|
 end
 
 delete_empty_directories(root)
-
 
 # MOVE THIS
 STEAM_RELATED = [

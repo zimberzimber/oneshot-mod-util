@@ -1,5 +1,6 @@
-root = ARGV[0].to_s
 raise "Usage: cleanup.rb <root path>" if ARGV.length < 1
+
+root = ARGV[0].to_s
 raise "#{root} is not an existing directory." if !Dir.exist?(root)
 
 require_relative("../common.rb")
@@ -7,6 +8,7 @@ require_relative("../common.rb")
 TO_REMOVE = [
     ".git",
     ".github",
+    ".luminol",
     "Crashes",
     "Demos",
     "docs",
@@ -19,7 +21,12 @@ TO_REMOVE = [
     "Game.exe",
     "Game.ini",
     "in memory.rxproj",
-    "in_memory_pancakes.rxproj",
+    "in memory (old version).rxproj",
+    "mkxp.json",
+    "prev_compare.bat",
+    "pull_compare.bat",
+    "pull_compare.WinMerge",
+    "run_fm",
     "log.txt",
     "mk_debug_save.exe",
     "OSFMOtherViewPipe_DontTouch",
